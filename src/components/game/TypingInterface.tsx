@@ -26,6 +26,22 @@ export const TypingInterface = () => {
   const [isLoading, setIsLoading] = useState(false);
   
   const currentWord = words[currentWordIndex];
+
+  // Generate visual representation of user's typed characters for audio mode
+  const getAudioModeCharacters = () => {
+    if (!userInput || !currentWord) return [];
+    
+    return userInput.split('').map((char, index) => {
+      // Check if the character is correct
+      const isCorrect = index < currentWord.text.length && 
+        char.toLowerCase() === currentWord.text[index].toLowerCase();
+      
+      return {
+        char,
+        status: isCorrect ? 'correct' : 'incorrect'
+      };
+    });
+  };
   
   // Fetch audio for the current word in audio mode
   useEffect(() => {
@@ -142,6 +158,9 @@ export const TypingInterface = () => {
     };
   }, []);
 
+  // Audio mode characters
+  const audioModeChars = getAudioModeCharacters();
+
   return (
     <div 
       ref={containerRef}
@@ -172,24 +191,46 @@ export const TypingInterface = () => {
       {/* Hidden audio element for playing TTS */}
       <audio ref={audioRef} src={audioPath || ''} />
       
-      {/* Word display with letter highlighting - hidden in audio mode */}
+      {/* Word display with letter highlighting */}
       <div className="mb-8 text-center">
         {audioMode ? (
           <div className="flex flex-col items-center">
-            <div className="text-4xl sm:text-6xl font-bold tracking-wide flex justify-center flex-wrap relative my-4">
-              {isLoading ? (
-                <span className="animate-pulse">Loading audio...</span>
-              ) : (
-                <button 
-                  onClick={playAudio}
-                  className="flex items-center justify-center p-4 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
-                  disabled={!audioPath}
+            {/* Audio mode - sound button */}
+            <div className="text-3xl sm:text-5xl font-bold tracking-wide relative my-4">
+              <button 
+                onClick={playAudio}
+                className="flex items-center justify-center p-4 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors absolute right-0 top-0"
+                disabled={!audioPath || isLoading}
+              >
+                {isLoading ? (
+                  <span className="animate-pulse text-xl">...</span>
+                ) : (
+                  <span className="text-2xl">🔊</span>
+                )}
+                <span className="sr-only">Play sound</span>
+              </button>
+            </div>
+            
+            {/* Audio mode - typed characters display */}
+            <div className="text-4xl sm:text-6xl font-bold tracking-wide flex justify-center flex-wrap relative min-h-[80px]">
+              {audioModeChars.map((char, index) => (
+                <span 
+                  key={index} 
+                  className={`transition-colors duration-200 mx-1 relative ${
+                    char.status === 'correct' 
+                      ? 'text-[var(--color-scheme-correct)]' 
+                      : 'text-[var(--color-scheme-incorrect)]'
+                  }`}
                 >
-                  <span className="text-3xl">🔊</span>
-                  <span className="sr-only">Play sound</span>
-                </button>
+                  {char.char}
+                </span>
+              ))}
+              {/* Show cursor at current typing position in audio mode */}
+              {isFocused && (
+                <span className="absolute bottom-0 left-[calc(100%+4px)] w-4 h-0.5 bg-primary animate-pulse" />
               )}
             </div>
+            
             <div className="mt-4">
               <p className="text-sm text-gray-500">
                 Type the word you hear
@@ -226,14 +267,16 @@ export const TypingInterface = () => {
         </div>
       </div>
       
-      {/* User input display */}
-      <div className="w-full mb-6">
-        <div className="px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
-          <p className="text-lg font-mono font-semibold text-center break-all">
-            {userInput || <span className="text-gray-400">Start typing...</span>}
-          </p>
+      {/* User input display - hide in audio mode since we're showing big letters instead */}
+      {!audioMode && (
+        <div className="w-full mb-6">
+          <div className="px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <p className="text-lg font-mono font-semibold text-center break-all">
+              {userInput || <span className="text-gray-400">Start typing...</span>}
+            </p>
+          </div>
         </div>
-      </div>
+      )}
       
       {/* Typing status info */}
       <div className="mt-4 text-center">
