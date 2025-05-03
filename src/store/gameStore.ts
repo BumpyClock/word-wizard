@@ -30,6 +30,7 @@ type GameState = {
   wordsCompleted: number;
   audioMode: boolean;
   audioPath: string | null;
+  openAIKey: string | null; // Add OpenAI Key state
   
   // Actions
   setWords: (words: Word[]) => void;
@@ -44,6 +45,7 @@ type GameState = {
   removeColorScheme: (schemeId: string) => void;
   toggleAudioMode: () => void;
   setAudioPath: (path: string | null) => void;
+  setOpenAIKey: (key: string | null) => void; // Add action to set OpenAI Key
 };
 
 export const defaultColorSchemes: ColorScheme[] = [
@@ -107,6 +109,7 @@ export const useGameStore = create<GameState>()(
       wordsCompleted: 0,
       audioMode: false,
       audioPath: null,
+      openAIKey: null, // Initialize OpenAI Key state
       
       setWords: (words) => set({ words }),
       
@@ -128,7 +131,7 @@ export const useGameStore = create<GameState>()(
           const nextWord = words[nextIndex];
           const initialTypedCharacters = nextWord.text.split('').map(char => ({
             char,
-            status: 'neutral' as const
+            status: 'neutral' as 'correct' | 'incorrect' | 'neutral'
           }));
           
           set({ 
@@ -150,7 +153,7 @@ export const useGameStore = create<GameState>()(
         const firstWord = get().words[0];
         const initialTypedCharacters = firstWord ? firstWord.text.split('').map(char => ({
           char,
-          status: 'neutral' as const
+          status: 'neutral' as 'correct' | 'incorrect' | 'neutral'
         })) : [];
       
         set({
@@ -174,7 +177,7 @@ export const useGameStore = create<GameState>()(
           
           return {
             char,
-            status: isCorrect ? 'correct' : 'incorrect'
+            status: isCorrect ? ('correct' as 'correct' | 'incorrect' | 'neutral') : ('incorrect' as 'correct' | 'incorrect' | 'neutral')
           };
         });
         
@@ -183,12 +186,13 @@ export const useGameStore = create<GameState>()(
           for (let i = input.length; i < currentWord.text.length; i++) {
             typedCharacters.push({
               char: currentWord.text[i],
-              status: 'neutral'
+              status: 'neutral' as 'correct' | 'incorrect' | 'neutral'
             });
           }
         }
         
-        set({ userInput: input, typedCharacters });
+        set({ 
+          userInput: input, typedCharacters });
       },
       
       setColorScheme: (schemeId) => {
@@ -217,6 +221,9 @@ export const useGameStore = create<GameState>()(
       })),
 
       setAudioPath: (path) => set({ audioPath: path }),
+
+      // Action to set OpenAI Key
+      setOpenAIKey: (key) => set({ openAIKey: key }),
     }),
     {
       name: 'word-wizard-storage',

@@ -76,6 +76,16 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  
+  /* OverlayScrollbars Custom Theme */
+  --os-size: 8px;
+  --os-padding: 4px;
+  --os-handle-radius: 10px;
+  --os-handle-bg: oklch(0.922 0 0);
+  --os-handle-bg-hover: oklch(0.646 0.222 41.116);
+  --os-handle-bg-active: oklch(0.646 0.222 41.116);
+  --os-handle-border-radius: 10px;
+  --os-track-bg: transparent;
 }
 
 .dark {
@@ -110,6 +120,12 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  
+  /* OverlayScrollbars Custom Theme - Dark Mode */
+  --os-handle-bg: oklch(0.3 0 0);
+  --os-handle-bg-hover: oklch(0.488 0.243 264.376);
+  --os-handle-bg-active: oklch(0.488 0.243 264.376);
+  --os-track-bg: transparent;
 }
 
 @layer base {
@@ -119,4 +135,63 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* OverlayScrollbars Custom Theme */
+.os-theme-custom .os-scrollbar {
+  --os-handle-bg: var(--os-handle-bg);
+  --os-handle-bg-hover: var(--os-handle-bg-hover);
+  --os-handle-bg-active: var(--os-handle-bg-active);
+  --os-handle-border-radius: var(--os-handle-radius, 10px);
+  --os-handle-interactive-area-offset: 4px;
+  --os-scrollbar-track-size: var(--os-size, 8px);
+  --os-scrollbar-size: var(--os-size, 8px);
+}
+
+.os-theme-custom .os-scrollbar .os-scrollbar-track .os-scrollbar-handle {
+  background: var(--os-handle-bg);
+  border-radius: var(--os-handle-border-radius);
+  opacity: 0.8;
+}
+
+.os-theme-custom .os-scrollbar:hover .os-scrollbar-track .os-scrollbar-handle {
+  background: var(--os-handle-bg-hover);
+  opacity: 1;
+}
+
+.os-theme-custom .os-scrollbar .os-scrollbar-track .os-scrollbar-handle.active {
+  background: var(--os-handle-bg-active);
+  opacity: 1;
+}
+
+.os-theme-custom .os-scrollbar .os-scrollbar-track {
+  background: var(--os-track-bg, transparent);
+  border-radius: 20px;
+}
+
+.os-theme-custom .os-scrollbar-horizontal {
+  padding: var(--os-padding, 4px) 0;
+  height: calc(var(--os-scrollbar-size) + (var(--os-padding, 4px) * 2));
+}
+
+.os-theme-custom .os-scrollbar-vertical {
+  padding: 0 var(--os-padding, 4px);
+  width: calc(var(--os-scrollbar-size) + (var(--os-padding, 4px) * 2));
+}
+
+/* Make sure scrollbars are visible in the right places */
+.os-theme-custom {
+  height: 100%;
+  width: 100%;
+}
+
+/* Make host element take full size */
+.os-theme-custom > .os-size-observer,
+.os-theme-custom > .os-resize-observer {
+  height: 100%;
+  width: 100%;
+}
+
+html, body {
+  height: 100%;
 }

@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
+          "bg-primary text-white shadow-xs hover:bg-primary/90",
         destructive:
           "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
@@ -40,17 +40,32 @@ function Button({
   variant,
   size,
   asChild = false,
+  style,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
   }) {
   const Comp = asChild ? Slot : "button"
+  
+  // Determine style overrides based on variant
+  let styleOverrides = { ...style };
+  
+  // Apply color scheme to default variant if no style override provided
+  if (variant === 'default' && !style?.backgroundColor) {
+    styleOverrides.backgroundColor = 'var(--color-scheme-correct, #4ade80)';
+  }
+  
+  // Apply color scheme to outline variant if no border color override provided
+  if (variant === 'outline' && !style?.borderColor) {
+    styleOverrides.borderColor = 'var(--color-scheme-neutral, #e5e7eb)';
+  }
 
   return (
     <Comp
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
+      style={styleOverrides}
       {...props}
     />
   )
