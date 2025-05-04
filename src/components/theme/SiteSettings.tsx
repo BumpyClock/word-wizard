@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useGameStore, ColorScheme } from '@/store/gameStore';
+import { useGameStore } from '@/store/gameStore';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';

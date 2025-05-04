@@ -34,6 +34,9 @@ export default function MathPage() {
                 Our team is currently developing fun and engaging math games to help children learn 
                 counting, addition, subtraction, multiplication, and more!
               </p>
+              <span>
+                Math challenges for all ages. Practice arithmetic, logic, and problem-solving. Don&apos;t just solve—master math!
+              </span>
             </div>
           </CardContent>
           <CardFooter className="flex justify-center">

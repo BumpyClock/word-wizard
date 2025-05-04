@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import path from 'path';
-import fs from 'fs';
 import { promises as fsPromises } from 'fs';
 
 export async function GET(

@@ -10,7 +10,6 @@ export const TypingInterface = () => {
     currentWordIndex,
     userInput,
     typedCharacters,
-    selectedColorScheme,
     nextWord,
     setUserInput,
     audioMode,
@@ -75,26 +74,27 @@ export const TypingInterface = () => {
   }, [audioMode, currentWord, audioPath, setAudioPath, openAIKey]); 
   
   // Play audio when it's loaded or when play button is clicked
-  const playAudio = () => {
+  const playAudio = React.useCallback(() => {
     if (audioRef.current && audioPath) {
       audioRef.current.play().catch(err => {
         console.error('Error playing audio:', err);
       });
     }
-  };
+  }, [audioPath]);
   
   // Auto-play audio when it becomes available in audio mode
   useEffect(() => {
     if (audioMode && audioPath && audioRef.current) {
       playAudio();
     }
-  }, [audioMode, audioPath]);
+  }, [audioMode, audioPath, playAudio]);
   
   // Handle typing via global keydown
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handleKeyDown = (e: KeyboardEvent | Event) => {
+      const event = e as KeyboardEvent;
       // Don't capture keystrokes when typing in input fields, textareas, or dialog elements
-      const target = e.target as HTMLElement;
+      const target = event.target as HTMLElement;
       if (target.tagName === 'INPUT' || 
           target.tagName === 'TEXTAREA' || 
           target.getAttribute('role') === 'dialog' ||
@@ -104,25 +104,25 @@ export const TypingInterface = () => {
       }
       
       // Ignore modifier keys and special keys
-      if (e.ctrlKey || e.altKey || e.metaKey) return;
+      if (event.ctrlKey || event.altKey || event.metaKey) return;
       
-      if (e.key === 'Tab') {
-        e.preventDefault();
+      if (event.key === 'Tab') {
+        event.preventDefault();
         nextWord();
         return;
       }
       
       // Handle backspace
-      if (e.key === 'Backspace') {
-        e.preventDefault();
+      if (event.key === 'Backspace') {
+        event.preventDefault();
         setUserInput(userInput.slice(0, -1));
         return;
       }
       
       // Only accept printable characters (single character keys)
-      if (e.key.length === 1) {
-        e.preventDefault();
-        const newInput = userInput + e.key;
+      if (event.key.length === 1) {
+        event.preventDefault();
+        const newInput = userInput + event.key;
         setUserInput(newInput);
         
         // Check if the word is complete
@@ -149,14 +149,14 @@ export const TypingInterface = () => {
     };
 
     // Add the keydown event listener
-    window.addEventListener('keydown', handleKeyDown as any);
+    window.addEventListener('keydown', handleKeyDown);
     
     // Set focus when component mounts
     setIsFocused(true);
     
     // Cleanup function
     return () => {
-      window.removeEventListener('keydown', handleKeyDown as any);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [userInput, currentWord, nextWord, setUserInput]);
   

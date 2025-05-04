@@ -26,6 +26,9 @@ export default function WordWizardPage() {
           <header className="mb-8 text-center">
             <h1 className="text-4xl font-bold mb-2">Word Wizard</h1>
             <p className="text-muted-foreground">Learn to spell words in a fun and interactive way!</p>
+            <span>
+              The classic word game for language learners. Practice spelling, listening, and vocabulary. Don&apos;t just play—master words!
+            </span>
           </header>
 
           {gameCompleted ? (

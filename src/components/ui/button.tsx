@@ -49,7 +49,7 @@ function Button({
   const Comp = asChild ? Slot : "button"
   
   // Determine style overrides based on variant
-  let styleOverrides = { ...style };
+  const styleOverrides = { ...style };
   
   // Apply color scheme to default variant if no style override provided
   if (variant === 'default' && !style?.backgroundColor) {

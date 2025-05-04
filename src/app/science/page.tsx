@@ -34,6 +34,9 @@ export default function SciencePage() {
                 Our team is currently developing fun and engaging science games to help children learn 
                 about nature, biology, physics, and the world around them!
               </p>
+              <span>
+                Science quizzes for curious minds. Practice facts, concepts, and critical thinking. Don&apos;t just learn—master science!
+              </span>
             </div>
           </CardContent>
           <CardFooter className="flex justify-center">
