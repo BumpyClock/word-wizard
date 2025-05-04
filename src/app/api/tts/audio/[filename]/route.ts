@@ -4,7 +4,7 @@ import { promises as fsPromises } from 'fs';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Record<string, string> }
+  { params }: { params: { filename: string } }
 ) {
   const filename = params.filename;
   
