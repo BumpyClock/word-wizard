@@ -19,7 +19,7 @@ export default function SciencePage() {
           <CardHeader>
             <CardTitle>Coming Soon!</CardTitle>
             <CardDescription>
-              We're working on exciting science games for you
+              We&apos;re working on exciting science games for you
             </CardDescription>
           </CardHeader>
           <CardContent>

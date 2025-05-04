@@ -19,7 +19,7 @@ export default function MathPage() {
           <CardHeader>
             <CardTitle>Coming Soon!</CardTitle>
             <CardDescription>
-              We're working on exciting math games for you
+              We&apos;re working on exciting math games for you
             </CardDescription>
           </CardHeader>
           <CardContent>

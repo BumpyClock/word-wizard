@@ -35,7 +35,7 @@ export default function WordWizardPage() {
             <div className="text-center p-8 border rounded-lg shadow-lg bg-background">
               <h2 className="text-3xl font-bold mb-4">Congratulations!</h2>
               <p className="mb-6 text-xl">
-                You've completed all {wordsCompleted} words!
+                You&apos;ve completed all {wordsCompleted} words!
               </p>
               <Button 
                 size="lg" 
