@@ -4,9 +4,9 @@ import { promises as fsPromises } from 'fs';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { filename: string } }
+  { params }: { params: Promise<{ filename: string }> }
 ) {
-  const filename = params.filename;
+  const { filename } = await params;
   
   // Security check - validate filename to prevent directory traversal
   if (!filename || filename.includes('..') || !filename.match(/^[a-zA-Z0-9-_.]+\.mp3$/)) {
